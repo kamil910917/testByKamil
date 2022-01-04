@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-public class Catalog extends CommonPage {
+public class CatalogPage extends CommonPage {
 
     private By womenSection = By.xpath("//a[@title='Women']");
     private By womenTops = By.xpath("//ul[@class='tree dynamized']/li[1]/span");

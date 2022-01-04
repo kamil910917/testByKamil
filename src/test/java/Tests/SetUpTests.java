@@ -15,7 +15,7 @@ public class SetUpTests {
     protected RegistrationPage registrationPage = new RegistrationPage();
     protected OrderPage orderPage = new OrderPage();
     protected PageStopper pageStopper = new PageStopper();
-    protected Catalog catalog = new Catalog();
+    protected CatalogPage catalogPage = new CatalogPage();
     protected Contact contact = new Contact();
     protected String baseWindow;
 
