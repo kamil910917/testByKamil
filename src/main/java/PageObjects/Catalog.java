@@ -171,9 +171,7 @@ public class Catalog extends CommonPage {
     }
 
     public void verifyProductComparison() {
-        WebElement productComparisonHeading = initElement(productCompare);
-        String text = productComparisonHeading.getText();
-        Assert.assertEquals(text, "PRODUCT COMPARISON");
+        Assert.assertEquals(initElement(productCompare).getText(),"PRODUCT COMPARISON");
     }
 
     public void removeProductFromComparison() {
