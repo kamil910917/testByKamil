@@ -14,9 +14,9 @@ public class SetUpTests {
     protected HomePage homePage = new HomePage();
     protected RegistrationPage registrationPage = new RegistrationPage();
     protected OrderPage orderPage = new OrderPage();
-    protected PageStopper pageStopper = new PageStopper();
-    protected Catalog catalog = new Catalog();
-    protected Contact contact = new Contact();
+    protected PageFooter pageFooter = new PageFooter();
+    protected CatalogPage catalogPage = new CatalogPage();
+    protected ContactPage contactPage = new ContactPage();
     protected String baseWindow;
 
     @BeforeClass
@@ -24,7 +24,7 @@ public class SetUpTests {
         DriverInit.initialize();
         driver = DriverInit.getInstance();
         baseWindow = DriverInit.getInstance().getWindowHandle();
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @BeforeMethod
@@ -32,8 +32,8 @@ public class SetUpTests {
         driver.get("http://automationpractice.com/index.php");
     }
 
-    @AfterClass
-    public void closeDriver() {
-        driver.quit();
-    }
+//    @AfterClass
+//    public void closeDriver() {
+//        driver.quit();
+//    }
 }

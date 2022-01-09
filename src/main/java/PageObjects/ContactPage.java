@@ -1,10 +1,10 @@
 package PageObjects;
 
+import Driver.DriverInit;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-public class Contact extends CommonPage {
+public class ContactPage extends CommonPage {
 
     private By subjectHeading = By.xpath("//select[@id='id_contact']");
     private By email = By.xpath("//input[@id='email']");
@@ -14,9 +14,8 @@ public class Contact extends CommonPage {
     private By alertSuccess = By.xpath("//p[@class='alert alert-success']");
     private By backButton = By.xpath("//i[@class='icon-chevron-left']");
 
-
     public void selectASubjectHeading() {
-        selectAnElement(subjectHeading, 1);
+        selectPicklistValue(subjectHeading, 1);
     }
 
     public void insertEmail() {
@@ -28,10 +27,7 @@ public class Contact extends CommonPage {
     }
 
     public void exampleMessage() {
-        setValue(message, "test!@#$%^&*(())" +
-                "31234513123123\n" +
-                "qwertyuiopplkjhgfdsazxcvbnm"
-        );
+        setValue(message, "test");
     }
 
     public void submitMessage() {
@@ -39,9 +35,7 @@ public class Contact extends CommonPage {
     }
 
     public void verifyAMessageHasBeenSent() {
-        WebElement message = initElement(alertSuccess);
-        String text = message.getText();
-        Assert.assertEquals(text, "Your message has been successfully sent to our team.");
+        Assert.assertEquals(DriverInit.getInstance().findElement(alertSuccess).getText(), "Your message has been successfully sent to our team.");
     }
 
     public void backToHomePage() {

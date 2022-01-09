@@ -11,24 +11,24 @@ public class Test6_VerificationOfContactWithCustomerService extends SetUpTests {
         homePage.contactWithCustomerService();
 
         //Step 2. Type a subject heading
-        contact.selectASubjectHeading();
+        contactPage.selectASubjectHeading();
 
         //Step 3. Insert an email
-        contact.insertEmail();
+        contactPage.insertEmail();
 
         //Step 4. Insert order reference
-        contact.insertOrderReference();
+        contactPage.insertOrderReference();
 
         //Step 5. Write a message and send to customer service team
-        contact.exampleMessage();
+        contactPage.exampleMessage();
 
         //Step 6. Send message to customer service
-        contact.submitMessage();
+        contactPage.submitMessage();
 
         //Step 7. Verify sending successfully
-        contact.verifyAMessageHasBeenSent();
+        contactPage.verifyAMessageHasBeenSent();
 
         //Step 8. back to home page
-        contact.backToHomePage();
+        contactPage.backToHomePage();
     }
 }
