@@ -2,7 +2,6 @@ package PageObjects;
 
 import Driver.DriverInit;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 public class CatalogPage extends CommonPage {
@@ -39,15 +38,9 @@ public class CatalogPage extends CommonPage {
     private By printedChiffonDress = By.xpath("//img[@title='Printed Chiffon Dress']");
     private By printedSummerDress = By.xpath("//img[@title='Printed Summer Dress']");
     private By priceDrop = By.xpath("//select[@id='selectProductSort']");
-    private By leftBlock = By.xpath("//ul[@class='product_list grid row']/li[1]");
-    private By rightBlock = By.xpath("//ul[@class='product_list grid row']/li[2]");
-    private By printedChiffonDressAddToCompare = By.xpath("//*[@id='center_column']/ul/li[1]/div/div[3]/div[2]/a");
-    private By printedSummerDressAddToCompare = By.xpath("//*[@id='center_column']/ul/li[2]/div/div[3]/div[2]/a");
-    private By compareButton = By.xpath("//button[@class='btn btn-default button button-medium bt_compare bt_compare']");
     private By productCompare = By.xpath("//h1[@class='page-heading']");
-    private By leftBlockRemoveItem = By.xpath("//*[@id='product_comparison']/tbody/tr[1]/td[2]/div[1]/a");
-    private By rightBlockRemoveItem = By.xpath("//*[@id='product_comparison']/tbody/tr[1]/td[2]/div[1]/a");
     private By backHomePage = By.xpath("//*[text()='Continue Shopping']");
+    private By compareProducts = By.xpath("//div[@class='top-pagination-content clearfix']//*[text()='Compare (']");
 
     public void goInWomenSection() {
         highlightElement(womenSection);
@@ -55,14 +48,12 @@ public class CatalogPage extends CommonPage {
         clickElement(womenSection);
     }
 
-    public void checkDropDownSectionTops() {
-        clickElement(womenTops);
-        clickElement(womenTops);
+    public void markDropDownSectionTops() {
+        doubleClick(womenTops);
     }
 
-    public void checkDropDownSectionDresses() {
-        clickElement(womenDresses);
-        clickElement(womenDresses);
+    public void markDropDownSectionDresses() {
+        doubleClick(womenDresses);
     }
 
     public void markCategories() {
@@ -97,7 +88,7 @@ public class CatalogPage extends CommonPage {
         clickUsingJS(girlyStyle);
     }
 
-    public void markDressProperties() {
+    public void markProperties() {
         clickUsingJS(colorfulDress);
         clickUsingJS(maxiDress);
         clickUsingJS(midiDress);
@@ -105,7 +96,7 @@ public class CatalogPage extends CommonPage {
         clickUsingJS(shortSleeve);
     }
 
-    public void checkAvailability() {
+    public void markAvailability() {
         clickUsingJS(inStock);
     }
 
@@ -113,70 +104,104 @@ public class CatalogPage extends CommonPage {
         clickUsingJS(manufacturer);
     }
 
-    public void dressCondition() {
+    public void markCondition() {
         clickUsingJS(condition);
     }
 
-    public void verifyInformationMenu() {
-        clickElement(deliveryInformation);
-        backCommand();
-        clickElement(legalNotice);
-        backCommand();
-        clickElement(termsAndConditionsOfUse);
-        backCommand();
-        clickElement(aboutUs);
-        backCommand();
-        clickElement(securePayment);
-        backCommand();
-        clickElement(ourStores);
+    public void verifyData(String information, By element) {
+        clickElement(element);
+        Assert.assertTrue(DriverInit.getInstance().findElement(By.xpath("//*[text()='" + information + "']")).isDisplayed());
         backCommand();
     }
 
-    public void checkPriceDrop() {
-        selectAnElement(priceDrop, 1);
-        selectAnElement(priceDrop, 2);
-        selectAnElement(priceDrop, 3);
-        selectAnElement(priceDrop, 4);
-        selectAnElement(priceDrop, 5);
-        selectAnElement(priceDrop, 6);
-        selectAnElement(priceDrop, 7);
+    public void verifyDelivery(String information) {
+        verifyData(information, deliveryInformation);
     }
 
-    public void checkSpecials() {
+    public void verifyLegalNotice(String information) {
+        verifyData(information, legalNotice);
+
+    }
+
+    public void verifyTermsAndConditionsOfUse(String information) {
+        verifyData(information, termsAndConditionsOfUse);
+
+    }
+
+    public void verifyAboutUs(String information) {
+        verifyData(information, aboutUs);
+    }
+
+    public void verifySecurePayment(String information) {
+        verifyData(information, securePayment);
+
+    }
+
+    public void verifyOurStores(String information) {
+        verifyData(information, ourStores);
+    }
+
+    public void PriceDrop() {
+        //Selecting sort by price: lowest first
+        selectPicklistValue(priceDrop, 1);
+        //Selecting sort by price: highest firsts
+        selectPicklistValue(priceDrop, 2);
+        //Selecting sort by product name: A to Z
+        selectPicklistValue(priceDrop, 3);
+        //Selecting sort by product name: Z to A
+        selectPicklistValue(priceDrop, 4);
+        //Selecting sort by: in stock
+        selectPicklistValue(priceDrop, 5);
+        //Selecting sort by reference: lowest first
+        selectPicklistValue(priceDrop, 6);
+        //Selecting sort by reference: highest first
+        selectPicklistValue(priceDrop, 7);
+    }
+
+    public void clickSpecials() {
         clickElement(menuWithSpecials);
+    }
+
+    public void checkSpecials(String url) {
+        Assert.assertTrue(DriverInit.getInstance().getCurrentUrl().contains(url));
+    }
+
+    public void hoverSpecials() {
         hoverAnElement(printedChiffonDress);
         hoverAnElement(printedSummerDress);
     }
 
-    public void comparePCD() {
-        scrollToElement(leftBlock);
-        moveToElement(leftBlock);
-        clickUsingJS(printedChiffonDressAddToCompare);
+    public void addToCompare(String dressName) {
+        scrollToElement(By.xpath("//a[@title='" + dressName + "']/ancestor::div[@class='product-container']"));
+        hoverAnElement(By.xpath("//a[@title='" + dressName + "']/ancestor::div[@class='product-container']"));
+        clickElement(By.xpath("//a[@title='" + dressName + "']/ancestor::div[@class='product-container']//a[text()='Add to Compare']"));
+    }
+
+    public void productComparison() {
+        scrollToElement(compareProducts);
+        waitForElement(compareProducts, 5);
+        clickElement(compareProducts);
     }
 
     public void checkPriceSortOnSpecials() {
-        selectAnElement(priceDrop, 1);
-        selectAnElement(priceDrop, 2);
-        selectAnElement(priceDrop, 3);
-        selectAnElement(priceDrop, 4);
-        selectAnElement(priceDrop, 5);
-        selectAnElement(priceDrop, 6);
-        selectAnElement(priceDrop, 7);
-    }
-
-    public void comparePSD() {
-        moveToElement(rightBlock);
-        clickUsingJS(printedSummerDressAddToCompare);
-        clickElement(compareButton);
+        //Selecting sort by price: lowest first
+        selectPicklistValue(priceDrop, 1);
+        //Selecting sort by price: highest firsts
+        selectPicklistValue(priceDrop, 2);
+        //Selecting sort by product name: A to Z
+        selectPicklistValue(priceDrop, 3);
+        //Selecting sort by product name: Z to A
+        selectPicklistValue(priceDrop, 4);
+        //Selecting sort by: in stock
+        selectPicklistValue(priceDrop, 5);
+        //Selecting sort by reference: lowest first
+        selectPicklistValue(priceDrop, 6);
+        //Selecting sort by reference: highest first
+        selectPicklistValue(priceDrop, 7);
     }
 
     public void verifyProductComparison() {
-        Assert.assertEquals(initElement(productCompare).getText(),"PRODUCT COMPARISON");
-    }
-
-    public void removeProductFromComparison() {
-        clickElement(leftBlockRemoveItem);
-        clickElement(rightBlockRemoveItem);
+        Assert.assertEquals(initElement(productCompare).getText(), "PRODUCT COMPARISON");
     }
 
     public void backToHomePage() {

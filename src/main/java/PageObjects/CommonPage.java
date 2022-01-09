@@ -1,27 +1,43 @@
 package PageObjects;
 
+import AutomationFramework.TestData;
 import Driver.DriverInit;
-import org.apache.hc.core5.reactor.Command;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.util.TimeUtils;
-import org.xml.sax.Locator;
 
 import java.util.Set;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class CommonPage {
+
     private int waitTime = 15; //dependent on sandbox performance
+    private By userEmail = By.xpath("//input[@id='email_create']");
+    private By submitCreateAnAccount = By.xpath("//button[@id='SubmitCreate']");
+    private By radioButton = By.xpath("//div[@id='uniform-id_gender1']");
+    private By firstNamePath = By.xpath("//input[@id='customer_firstname']");
+    private By lastNamePath = By.xpath("//input[@id='customer_lastname']");
+    private By passwordPath = By.xpath("//input[@id='passwd']");
+    private By dayOfBirth = By.xpath("//select[@id='days']");
+    private By monthOfBirth = By.xpath("//select[@id='months']");
+    private By yearOfBirth = By.xpath("//select[@id='years']");
+    private By signUpCheckBox = By.xpath("//input[@id='newsletter']");
+    private By specialOffersCheckBox = By.xpath("//input[@id='optin']");
+    private By address = By.xpath("//input[@id='address1']");
+    private By city = By.xpath("//input[@id='city']");
+    private By state = By.xpath("//select[@id='id_state']");
+    private By postalCode = By.xpath("//input[@id='postcode']");
+    private By country = By.xpath("//select[@id='id_country']");
+    private By mobilePhone = By.xpath("//input[@id='phone_mobile']");
+    private By assignAnAddress = By.xpath("//input[@id='alias']");
 
     public WebElement initElement(By locator) {
         return DriverInit.getInstance().findElement(locator);
     }
 
     public void clickElement(By element) {
+        highlightElement(element);
         waitForElement((element), waitTime);
         initElement(element).click();
     }
@@ -62,34 +78,29 @@ public class CommonPage {
     public void setRandomValueWithEmail(By locator) {
         highlightElement(locator);
         initElement(locator).clear();
+        initElement(locator).sendKeys(generateRandomString() + "@gmail.com");
+    }
+
+    public void setRandomValue(By locator) {
+        highlightElement(locator);
+        initElement(locator).clear();
+        initElement(locator).sendKeys(generateRandomString());
+    }
+
+    public String generateRandomString() {
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
                 + "abcdefghijklmnopqrstuvxyz";
         StringBuilder sb = new StringBuilder(20);
         for (int i = 0; i < 12; i++) {
             int index = (int) (AlphaNumericString.length() * Math.random());
-
             sb.append(AlphaNumericString.charAt(index));
         }
-        initElement(locator).sendKeys(sb + "@gmail.com");
+        String random = sb.toString();
+        return random;
     }
 
-    public void setRandomValue(By locator) {
-        highlightElement(locator);
-        initElement(locator).clear();
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "0123456789"
-                + "abcdefghijklmnopqrstuvxyz";
-        StringBuilder sb = new StringBuilder(20);
-        for (int i = 0; i < 9; i++) {
-            int index = (int) (AlphaNumericString.length() * Math.random());
-
-            sb.append(AlphaNumericString.charAt(index));
-        }
-        initElement(locator).sendKeys(sb);
-    }
-
-    public void selectAnElement(By locator, int index) {
+    public void selectPicklistValue(By locator, int index) {
         highlightElement(locator);
         Select selectElement = new Select(initElement(locator));
         selectElement.selectByIndex(index);
@@ -103,15 +114,13 @@ public class CommonPage {
         DriverInit.getInstance().manage().window().maximize();
     }
 
-    public void switchToWindows(String window) {
+    public void switchToBaseWindow(String window) {
         DriverInit.getInstance().switchTo().window(window);
     }
-
 
     public void closeWindow() {
         DriverInit.getInstance().close();
     }
-
 
     public void hoverAnElement(By locator) {
         Actions action = new Actions(DriverInit.getInstance());
@@ -122,14 +131,120 @@ public class CommonPage {
         DriverInit.getInstance().navigate().back();
     }
 
-    public void moveToElement(By locator) {
-        Actions builder = new Actions(DriverInit.getInstance());
-        WebElement element = DriverInit.getInstance().findElement(locator);
-        Actions mouseOver = builder.moveToElement(element);
-    }
-
     public void acceptAlert() {
         DriverInit.getInstance().switchTo().alert().accept();
     }
 
+    public void doubleClick(By locator) {
+        Actions actions = new Actions(DriverInit.getInstance());
+        actions.doubleClick(DriverInit.getInstance().findElement(locator)).perform();
+    }
+
+    public void insertRandomEmailAndAcceptAccountCreate() {
+        clickElement(userEmail);
+        setRandomValueWithEmail(userEmail);
+        clickElement(submitCreateAnAccount);
+    }
+
+    public void selectGender() {
+        highlightElement(radioButton);
+        waitForElement(radioButton, 5);
+        clickUsingJS(radioButton);
+    }
+
+    public void insertFirstName() {
+        setValue(firstNamePath, TestData.firstName);
+    }
+
+    public void insertLastName() {
+        setValue(lastNamePath, TestData.lastName);
+    }
+
+    public void insertPassword() {
+        clickElement(passwordPath);
+        setRandomValue(passwordPath);
+    }
+
+    public void selectDayOfBirth(int day) {
+        selectPicklistValue(dayOfBirth, day);
+    }
+
+    public void selectMonthOfBirth(int month) {
+        selectPicklistValue(monthOfBirth, month);
+    }
+
+    public void selectYearOfBirth(int year) {
+        selectPicklistValue(yearOfBirth, year);
+    }
+
+    public void signUpToNewsletterCheckBox() {
+        clickUsingJS(signUpCheckBox);
+    }
+
+    public void receiveSpecialOffersFromOurPartnersCheckBox() {
+        clickUsingJS(specialOffersCheckBox);
+    }
+
+    public void yourPersonalInformation(int dayIndex, int monthIndex, int yearIndex) {
+        selectGender();
+        insertFirstName();
+        insertLastName();
+        insertPassword();
+        selectDayOfBirth(dayIndex);
+        selectMonthOfBirth(monthIndex);
+        selectYearOfBirth(yearIndex);
+        signUpToNewsletterCheckBox();
+        receiveSpecialOffersFromOurPartnersCheckBox();
+    }
+
+    public void signIn() {
+        yourPersonalInformation(2, 1, 1);
+        yourAddress();
+    }
+
+    public void yourAddress() {
+        setAddress();
+        setCity();
+        setState();
+        setPostalCode();
+        setCountry();
+        setMobilePhone();
+        setFullAddress();
+    }
+
+    public void setAddress() {
+        highlightElement(address);
+        setValue(address, TestData.street);
+    }
+
+    public void setCity() {
+        highlightElement(city);
+        setValue(city, TestData.city);
+    }
+
+    public void setState() {
+        highlightElement(state);
+        selectPicklistValue(state, 1);
+    }
+
+    public void setPostalCode() {
+        highlightElement(postalCode);
+        setValue(postalCode, TestData.postalCode);
+    }
+
+    public void setCountry() {
+        highlightElement(country);
+        selectPicklistValue(country, 1);
+    }
+
+    public void setMobilePhone() {
+        highlightElement(mobilePhone);
+        clickElement(mobilePhone);
+        setValue(mobilePhone, TestData.mobileNumber);
+    }
+
+    public void setFullAddress() {
+        clickElement(assignAnAddress);
+        setValue(assignAnAddress, TestData.fullAddress);
+    }
 }

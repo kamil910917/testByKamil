@@ -1,8 +1,8 @@
 package PageObjects;
 
+import AutomationFramework.TestData;
 import Driver.DriverInit;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 public class HomePage extends CommonPage {
@@ -15,16 +15,11 @@ public class HomePage extends CommonPage {
     private By advertisementOnMyStore = By.xpath("//a[@class='bx-next']");
     private By fadedShortSleeve = By.xpath("//img[@alt='Faded Short Sleeve T-shirts']");
     private By blouse = By.xpath("//img[@alt='Blouse']");
-    private By printedDress = By.xpath("//img[@alt='Printed Dress']");
-    private By printedDressSecond = By.xpath("//img[@src='http://automationpractice.com/img/p/1/0/10-home_default.jpg']");
-    private By printedSummerDress = By.xpath("//img[@src='http://automationpractice.com/img/p/1/2/12-home_default.jpg']");
-    private By printedSummerDressSecond = By.xpath("//img[@src='http://automationpractice.com/img/p/1/6/16-home_default.jpg']");
-    private By printedChiffonDress = By.xpath("//img[@src='http://automationpractice.com/img/p/2/0/20-home_default.jpg']");
-    private By printedChiffonDressClick = By.xpath("//img[@src='http://automationpractice.com/img/p/2/0/20-home_default.jpg']");
-    private By firstPhoto = By.xpath("//div[@id='views_block']/div/ul/li");
-    private By secondPhoto = By.xpath("//div[@id='views_block']/div/ul/li[2]");
-    private By thirdPhoto = By.xpath("//div[@id='views_block']/div/ul/li[3]");
-    private By fourthPhoto = By.xpath("//div[@id='views_block']/div/ul/li[4]");
+    private By printedDress = By.xpath("//ul[@id='homefeatured']//li[3]//a[@title='Printed Dress']//img");
+    private By printedDressSecond = By.xpath("//ul[@id='homefeatured']//li[4]//a[@title='Printed Dress']//img");
+    private By printedSummerDress = By.xpath("//ul[@id='homefeatured']//li[5]//a[@title='Printed Summer Dress']//img");
+    private By printedSummerDressSecond = By.xpath("//ul[@id='homefeatured']//li[6]//a[@title='Printed Summer Dress']//img");
+    private By printedChiffonDress = By.xpath("//ul[@id='homefeatured']//li[7]//a[@title='Printed Chiffon Dress']//img");
     private By printedChiffonDressViewLarger = By.xpath("//img[@id='bigpic']");
     private By clickNext = By.xpath("//a[@title='Next']");
     private By clickBack = By.xpath("//a[@title='Previous']");
@@ -39,17 +34,12 @@ public class HomePage extends CommonPage {
     private By nameOfFriend = By.xpath("//input[@id='friend_name']");
     private By friendEmail = By.xpath("//input[@id='friend_email']");
     private By sendToFriend = By.xpath("//button[@id='sendEmail']");
-    private By verifySending = By.xpath("//div[@class='fancybox-skin']/div/div/p");
-    private By confirmSending = By.xpath("//p[@class='submit']/input");
+    private By verifySending = By.xpath("//p[text()='Your e-mail has been sent successfully']");
+    private By clickOk = By.xpath("//input[@type='button']");
     private By inputQuantity = By.xpath("//input[@id='quantity_wanted']");
-    private By quantityMinus = By.xpath("//a[@class='btn btn-default button-minus product_quantity_down']");
-    private By quantityPlus = By.xpath("//a[@class='btn btn-default button-plus product_quantity_up']");
-    private By selectSize = By.xpath("//div[@class='selector']");
     private By dressSize = By.xpath("//select[@id='group_1']");
     private By yellowDress = By.xpath("//a[@title='Yellow']");
     private By greenDress = By.xpath("//a[@title='Green']");
-    private By wishList = By.xpath("//a[@id='wishlist_button']");
-    private By closeAlert = By.xpath("//a[@title='Close']");
     private By addProductButton = By.xpath("//p[@id='add_to_cart']/button/span");
     private By closeWindow = By.xpath("//span[@title='Close window']");
     private By shopCart = By.xpath("//a[@title='View my shopping cart']");
@@ -57,17 +47,9 @@ public class HomePage extends CommonPage {
     private By backToMyStore = By.xpath("//a[@title='My Store']");
     private By bestSellersPhrase = By.xpath("//a[@class='blockbestsellers']");
     private By popularPhrase = By.xpath("//a[@class='homefeatured']");
-    private By bestSellersNo1 = By.xpath("//ul[@id='blockbestsellers']/li[1]");
-    private By bestSellersNo2 = By.xpath("//ul[@id='blockbestsellers']/li[2]");
-    private By bestSellersNo3 = By.xpath("//ul[@id='blockbestsellers']/li[3]");
-    private By bestSellersNo4 = By.xpath("//ul[@id='blockbestsellers']/li[4]");
-    private By bestSellersNo5 = By.xpath("//ul[@id='blockbestsellers']/li[5]");
-    private By bestSellersNo6 = By.xpath("//ul[@id='blockbestsellers']/li[6]");
-    private By bestSellersNo7 = By.xpath("//ul[@id='blockbestsellers']/li[7]");
     private By customerServiceContact = By.xpath("//div[@id='contact-link']");
 
     public void searchPhrase(String phrase) {
-        highlightElement(searchBox);
         clickElement(searchBox);
         setValue(searchBox, phrase);
         clickElement(submitButton);
@@ -87,8 +69,7 @@ public class HomePage extends CommonPage {
     }
 
     public void checkAdvertisement() {
-        clickElement(advertisementOnMyStore);
-        clickElement(advertisementOnMyStore);
+        doubleClick(advertisementOnMyStore);
     }
 
     public void hoverPopularCollection() {
@@ -104,24 +85,14 @@ public class HomePage extends CommonPage {
 
     public void hoverBestSellers() {
         clickElement(bestSellersPhrase);
-        hoverAnElement(bestSellersNo1);
-        hoverAnElement(bestSellersNo2);
-        hoverAnElement(bestSellersNo3);
-        hoverAnElement(bestSellersNo4);
-        hoverAnElement(bestSellersNo5);
-        hoverAnElement(bestSellersNo6);
-        hoverAnElement(bestSellersNo7);
+        for(int i = 1; i<=7; i++) {
+            hoverAnElement(By.xpath("//ul[@id='blockbestsellers']/li[" + i + "]"));
+        }
         clickElement(popularPhrase);
-
     }
 
-    public void displayTshirts() {
-        clickUsingJS(printedChiffonDressClick);
-        hoverAnElement(firstPhoto);
-        hoverAnElement(secondPhoto);
-        hoverAnElement(thirdPhoto);
-        hoverAnElement(fourthPhoto);
-        hoverAnElement(firstPhoto);
+    public void clickPrintedChiffonDress() {
+        clickUsingJS(printedChiffonDress);
     }
 
     public void ViewLargerPrintedChiffonDress() {
@@ -129,69 +100,70 @@ public class HomePage extends CommonPage {
     }
 
     public void clickNextDress() {
-        clickElement(clickNext);
-        clickElement(clickNext);
+        doubleClick(clickNext);
         clickElement(clickNext);
     }
 
     public void clickPreviousDress() {
-        clickElement(clickBack);
-        clickElement(clickBack);
+        doubleClick(clickBack);
         clickElement(clickBack);
         clickElement(closeTab);
     }
 
-    public void checkRestFunctions() {
+    public void hoverSocialIcons() {
         hoverAnElement(tweetLogo);
         hoverAnElement(facebookLogo);
         hoverAnElement(googleLogo);
         hoverAnElement(pinterestLogo);
         hoverAnElement(sendToAFriendLogo);
         hoverAnElement(printLogo);
+    }
+
+    public void clickAndVerifySendToAFriend() {
         clickElement(sendToAFriendLogo);
-        checkSendingToAFriend();
+        Assert.assertEquals(DriverInit.getInstance().findElement(verifySendToAFriendLogo).getText(), "SEND TO A FRIEND");
+    }
+
+    public void typeRecipient() {
         waitForElement(nameOfFriend, 3);
-        setValue(nameOfFriend, "testName");
+        setValue(nameOfFriend, TestData.firstName);
         setRandomValueWithEmail(friendEmail);
         clickElement(sendToFriend);
-        verifySendingToFriend();
-        clickElement(confirmSending);
-        hoverAnElement(quantityMinus);
-        hoverAnElement(quantityPlus);
-        clickElement(inputQuantity);
-        setValue(inputQuantity, "10000");
-        clickElement(quantityPlus);
-        clickElement(quantityMinus);
-        clickElement(selectSize);
-        selectAnElement(dressSize, 1);
-        selectAnElement(dressSize, 2);
+    }
+
+    public void verifySending() {
+        Assert.assertEquals(DriverInit.getInstance().findElement(verifySending).getText(), "Your e-mail has been sent successfully");
+        clickElement(clickOk);
+    }
+
+    public void putValuesIntoBoxProduct(String value) {
+        setValue(inputQuantity, value);
+    }
+
+    public void setDressSizeAndColor() {
+        selectPicklistValue(dressSize, 1);
+        selectPicklistValue(dressSize, 2);
         highlightElement(yellowDress);
         clickElement(yellowDress);
         highlightElement(greenDress);
         clickElement(greenDress);
-        clickElement(wishList);
-        clickUsingJS(closeAlert);
+    }
+
+    public void addProductToShoppingCart() {
         clickElement(addProductButton);
         clickElement(closeWindow);
+    }
+
+    public void removeProductFromShoppingCart() {
         hoverAnElement(shopCart);
         clickElement(removeLink);
+    }
+
+    public void goBackToBaseWindow() {
         clickElement(backToMyStore);
-    }
-
-    public void checkSendingToAFriend() {
-        WebElement sendDressToFriend = initElement(verifySendToAFriendLogo);
-        String text = sendDressToFriend.getText();
-        Assert.assertEquals(text, "SEND TO A FRIEND");
-    }
-
-    public void verifySendingToFriend() {
-        WebElement sendAlert = initElement(verifySending);
-        String text = sendAlert.getText();
-        Assert.assertEquals(text, "Your e-mail has been sent successfully");
     }
 
     public void contactWithCustomerService() {
         clickElement(customerServiceContact);
     }
-
 }
